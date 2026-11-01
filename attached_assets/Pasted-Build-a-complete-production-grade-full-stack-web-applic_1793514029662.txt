@@ -1,0 +1,65 @@
+Build a complete, production-grade full-stack web application called **"TaskFlow AI – An Intelligent Task Management & Execution Transparency Platform"** for the Replit Challenge: **"Build an App that Shows Its Work."**
+
+### IMPORTANT: ATTACHED UI REFERENCE & OFFICIAL CHALLENGE RULES
+Carefully inspect the attached UI mockup image and strictly replicate its visual layout, dark-mode color palette, and exact component labels while following these mandatory challenge rules:
+
+1. **Replicate the 4-Quadrant Workspace + Sidebar from the Attached Image:**
+   - **Left Sidebar:** App title `TaskFlow AI`, navigation links (`Command Center`, `Task Dashboard`, `Smart Organizer`, `Execution Studio`, `Execution History`), and the user avatar + **`Sign Out`** button pinned at the bottom-left.
+   - **Top-Left Panel ("Smart Organizer"):** Left side has the `Draft / Messy Notes` input box (pre-filled or loadable with: *"I have a Java interview on Monday, complete my React project by Friday, update my resume today, and apply to five companies."*) and the blue **`Generate & Trace Tasks ↗`** button. Right side has the **`Failure Recovery Simulation`** switches:
+     1. `Simulate DB Drop (Auto-Retry)`
+     2. `Simulate AI Error (Fallback)`
+     3. `Simulate Hard DB Outage`
+   - **Bottom-Left Panel ("Task Dependency Flowchart"):** Interactive node-and-edge flowchart connecting the extracted tasks with directional arrows (`Update Resume [Today | High Priority - Red]` ──> `Apply to 5 Companies [Deadline: Unspecified - Amber]` ──> `Java Interview [Monday - Green]` ──> `Complete React Project [Friday - Blue]`), plus an **Edit & Approve** toggle so users can edit tasks inline and approve them to the Dashboard.
+   - **Top-Right Panel ("How It Works - Live Execution Diagram"):** Dotted grid canvas with the **`[▶ Replay Run]`** button and **`0.25x` | `0.5x` | `1x` | `2x`** speed selector pills in the top-right header. Shows the 6 connected execution boxes, each topped with its full-stack layer badge (`PAGE -> SERVER`, `SERVER`, `OUTSIDE SERVICE`, `DATABASE`, `SERVER -> PAGE`) and true duration in `ms`.
+   - **Bottom-Right Panel ("Failure Intelligence & Event Stream"):** Left side shows the syntax-highlighted JSON **`Payload`** for whichever diagram step the user clicks; right side shows the **`Failure Recovery Stream`** status cards (`Database operation: Failed` -> `Error: Connection unavailable` -> `Recovery: Retry #2 Succeeded` -> `Final Status: Recovered`).
+
+2. **NO Artificial Delays During Live Runs:**
+   - NEVER add fake `sleep()` or `setTimeout()` delays during a live run just to make it easier to watch—all live execution timings (`ms`) on the diagram must be 100% genuine.
+   - Because a real run finishes quickly, let visitors use the **`▶ Replay Run`** button and slow-motion speed controls (`0.25x`, `0.5x`, `1x`, `2x`) to watch the recorded run step-by-step at a speed they can follow.
+
+3. **Real Server-Sent Events (SSE) & Plain-Words Event Mapping:**
+   - As each of the 6 steps starts and finishes on the server, stream a real event (`started`, `succeeded`, `failed`, `retrying`, `recovered`) from the server to the browser so the diagram and event stream update live from real execution.
+
+4. **Mobile-Responsive Diagram & Layout:**
+   - Many reviewers will open the live link on a phone. On mobile screens (`< 768px`), stack the panels vertically and stack the 6 diagram boxes vertically so all labels, timings, and arrows remain crisp and readable with zero horizontal scrolling.
+
+---
+
+### 1. AUTHENTICATION (`/login`) + INSTANT VISITOR / JUDGE ACCESS
+- Build a clean dark-mode **Login / Sign Up** page (`/login`) with Email + Password authentication and session persistence, plus a working **`Sign Out`** button in the sidebar footer.
+- **Zero-Friction Judge Access:** Include a prominent **"1-Click Demo Login (Explore Live App)"** button on `/login` (and allow visitors opening the shared link to jump straight into the pre-seeded Demo Account `demo@taskflow.ai`) so reviewers on mobile or desktop can immediately test and replay runs without typing credentials.
+
+---
+
+### 2. THE 6-STEP "HOW IT WORKS" FULL-STACK DIAGRAM SPECIFICATION
+Every run must execute and record these exact 6 steps in order, matching the boxes in the attached image:
+1. **`Input Received`** — Layer Badge: **`[PAGE -> SERVER]`** — *Browser sends messy notes payload to the Replit server.*
+2. **`Validation`** — Layer Badge: **`[SERVER]`** — *Server validates note text, length, and request payload.*
+3. **`AI Task Extraction`** — Layer Badge: **`[OUTSIDE SERVICE]`** — *Server calls the AI model (or fallback NLP service if AI fails/is unavailable) to extract tasks and deadlines.*
+4. **`Prioritization & Scoring`** — Layer Badge: **`[SERVER]`** — *Server assigns priority (`High`/`Medium`/`Low`), calculates Confidence Score (`0–100%`), checks for duplicates, and maps task dependencies.*
+5. **`Save Tasks`** — Layer Badge: **`[DATABASE]`** — *Saves extracted tasks and run events to PostgreSQL (with automatic retry backoff if a temporary DB drop occurs).*
+6. **`Response Rendered`** — Layer Badge: **`[SERVER -> PAGE]`** — *Server streams the final structured tasks and telemetry back to the browser UI.*
+
+- Clicking any of the 6 boxes on the diagram highlights it and displays that step's exact `Input JSON`, `Output JSON`, timestamp, and duration (`ms`) in the bottom `Payload` inspector.
+
+---
+
+### 3. SMART TASK INTELLIGENCE RULES
+- **Strict Unspecified Deadline Rule:** Extract stated deadlines (`Today`, `Monday`, `Friday`), and whenever a task has NO deadline stated in the note (e.g., *"apply to five companies"*), mark its deadline as **`Unspecified`** with an Amber warning badge—never invent dates.
+- **Confidence Score, Duplicate Detection & Missing Info:** Each extracted task displays a confidence percentage (`e.g., 94%`), flags duplicates against existing tasks, and highlights missing info (`Missing: Exact deadline`).
+- **Inline Edit & Approval:** Users can edit any extracted task's title, priority, or deadline, mark tasks complete, or delete them.
+
+---
+
+### 4. ALL 5 SIDEBAR VIEWS FUNCTIONAL
+1. **`Command Center`:** The 4-panel split-screen view shown in the attached mockup image.
+2. **`Task Dashboard`:** 4 KPI metric cards (`Total Tasks`, `Completed Tasks`, `Pending Tasks`, `High-Priority Tasks`), filter bar (`All`, `Pending`, `Completed`, `High Priority`, `Unspecified Deadline`), task list, and Task Dependency Flowchart view.
+3. **`Smart Organizer`:** Focused view for messy note input, Failure Recovery Simulation toggles, extracted tasks editor, and Task Dependency Flowchart.
+4. **`Execution Studio`:** Focused view for the "How It Works" 6-step full-stack diagram, Replay controls (`0.25x`–`2x`), Payload Inspector, and Failure Recovery Stream.
+5. **`Execution History`:** Table of all saved past runs stored in the database (`Run ID`, `Input Snippet`, `Timestamp`, `Total Duration ms`, `Fault Simulated`, `Final Status`: `Succeeded` / `Recovered` / `Failed`) with a **`Watch Replay`** button on every row that loads and replays that run in the diagram.
+
+---
+
+### 5. POSTGRESQL DATABASE & PRE-SEEDED DATA
+- Use Replit's PostgreSQL database (`users`, `tasks`, `execution_runs`, `execution_events`) so all tasks, runs, and replay histories persist across page refreshes.
+- Pre-seed the database with the exact 4 tasks and the recovered run shown in the attached mockup image (plus 1 clean success run and 1 hard-failure run in Execution History) so the app looks identical to the mockup immediately on first load.

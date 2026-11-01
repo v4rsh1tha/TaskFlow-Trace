@@ -1,0 +1,136 @@
+Apply the following final 9-point polish pass to the EXISTING TaskFlow AI application.
+
+IMPORTANT:
+
+* Do not create a new project or rebuild the application.
+* Inspect the existing codebase and identify the relevant components before making changes.
+* Preserve the current dark theme, visual identity, navigation, database, authentication, APIs, and existing functionality.
+* Make the changes in the existing components and shared styles.
+* Do not introduce paid services, unnecessary dependencies, or API keys.
+* Do not delete unrelated user data or execution history.
+* Keep the application responsive on laptop, tablet, and mobile screens.
+
+### 1. Correct Row 2 Arrow Direction in the Execution Diagram
+
+In the "How It Works – Live Execution Diagram":
+
+The six-step diagram uses a snake layout:
+
+* Step 1 → Step 2 → Step 3
+* Step 3 ↓ Step 4
+* Step 4 ← Step 5 ← Step 6
+
+Currently, the bottom-row arrows point in the wrong direction.
+
+Fix the bottom-row connectors to point left, matching the actual visual order:
+Step 4 → Step 5 → Step 6 in execution order, while visually displaying the reverse direction across the row.
+
+Alternatively, rearrange the bottom row left-to-right as Steps 4, 5, 6 and connect Step 3 to Step 4 correctly.
+
+Ensure the arrows accurately represent execution order.
+
+### 2. Fix Clipped Task Cards in Task Dependency Flowchart
+
+* Remove fixed heights and max-heights that cut off task cards.
+* Remove overflow-hidden where it clips the bottom task cards.
+* Use h-auto, appropriate spacing, and pb-6.
+* Ensure every task card is completely visible.
+* Make the flowchart container expand naturally with its content.
+
+### 3. Fix Right-Edge Clipping in Command Center
+
+For the Command Center two-column layout:
+
+* Apply min-w-0 and w-full to the grid children and relevant cards.
+* Use responsive grid columns.
+* Fix horizontal overflow and right-edge clipping.
+* Ensure "Failure Intelligence & Event Stream" and "How It Works" fit properly on standard laptop screens.
+* Stack the cards cleanly on smaller screens.
+
+### 4. Keep Generate & Trace Tasks Visible Above the Fold
+
+Inside the Command Center's Smart Organizer card:
+
+* Reduce excessive empty vertical space in the Draft / Messy Notes textarea.
+* Make the textarea height appropriate for the available content.
+* Keep the "Generate & Trace Tasks ↗" button immediately below the input.
+* Avoid unnecessary scrolling to access the button.
+
+### 5. Deduplicate Tasks and Improve Flowchart Connectors
+
+The Task Dependency Flowchart and default seed data should display exactly these four unique workflow tasks:
+
+1. Update resume
+2. Apply to five companies
+3. Java interview
+4. Complete React project
+
+Requirements:
+
+* Remove duplicate default seed entries and prevent duplicate tasks from the same extraction run.
+* Normalize equivalent task titles before deduplication.
+* Do not delete unrelated user-created tasks or historical records.
+* Display the four default tasks in a clean, connected 2×2 flowchart.
+* Make connector arrows bright, clear, and high-contrast.
+* Match the glowing emerald/amber connector style used in Execution Studio.
+
+### 6. Remove Literal Color Words from Task Badges
+
+Remove literal color suffixes such as:
+
+* * Red
+* * Green
+* * Blue
+* * Amber
+
+Display clean, meaningful labels instead:
+
+* High Priority
+* Due: Monday
+* Due: Friday
+* Deadline: Unspecified
+
+Keep colors as visual styling only, not as part of the displayed text.
+
+### 7. Fix Unspecified Deadline and Java Interview Labels
+
+* Replace duplicated "Unspecified · Unspecified" text with one clean label: "Deadline: Unspecified".
+* Replace the seed task title "Attend-Java-interview" with "Java interview".
+* Ensure the same clean title is displayed consistently in the dashboard, flowchart, organizer, and execution details.
+* Never invent deadlines when the original input does not specify one.
+
+### 8. Improve Task Approval States
+
+* Once a task is approved, replace its active cyan "Approve" button with a subtle "Approved ✓" badge.
+* Display the correct approval state when viewing approved tasks on Task Dashboard.
+* Add an "Approve All" button to Smart Organizer.
+* Approve All should approve all currently extracted, eligible tasks.
+* Prevent already-approved tasks from being approved repeatedly.
+* Persist approval status correctly.
+
+### 9. Clean Up Sidebar User Profile Footer
+
+In the bottom-left sidebar:
+
+* Display the active user's name as "Demo Workspace".
+* Display the email as "[demo@taskflow.ai](mailto:demo@taskflow.ai)".
+* Keep the existing teal circular avatar.
+* Remove the duplicate exit icon above the API ok status.
+* Show only one clear "Sign Out" button.
+* Ensure sign-out continues to work correctly.
+
+### Final Verification
+
+After implementing all nine changes:
+
+1. Run the application and check for TypeScript errors.
+2. Check the browser console for errors.
+3. Verify that all four default workflow tasks appear without duplicates.
+4. Verify that task cards are not clipped.
+5. Verify all execution diagram arrows and connector directions.
+6. Check the Command Center at standard laptop width and mobile width.
+7. Test Approve, Approve All, and the Approved badge states.
+8. Verify that existing navigation, authentication, and execution history still work.
+9. Report which files and components were changed and list any issues that could not be resolved.
+
+Do not publish or deploy the application. Wait for my review.
